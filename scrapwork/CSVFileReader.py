@@ -3,7 +3,8 @@
 from csv import Sniffer, DictReader
 
 # Take file name as raw string
-test_file = r'DummyData.csv'
+# test_file = r'DummyData.csv'
+test_file = r'DummyData(negative numbers+decimal numbers+letters).csv'
 
 
 def create_reader(data=None):
@@ -41,4 +42,16 @@ def create_reader(data=None):
         # Return DictReader object
         return reader
 
-create_reader(test_file)
+# data = create_reader(test_file)
+# print(data)
+
+"""with open(test_file, 'rb') as csvfile:
+    try:
+        if not Sniffer().has_header(csvfile.read(1024)):
+            raise NameError("No header row in file detected")
+    except NameError:
+        print('An exception flew by!')
+        raise
+    print("Header: {}".format(Sniffer().has_header(csvfile.read(1024))))
+"""
+
