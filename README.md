@@ -1,7 +1,7 @@
 # ConversantCodingExercise
-Data parsing, analysis, and display exercise.
+## Data parsing, analysis, and display exercise.
 
-Getting Started:
+###Getting Started:
     With VirtualEnvWrapper
     - Activate virtual environment "Env" provided in directory "VirtualEnvironment".
         >workon Env
