@@ -15,7 +15,7 @@ def valid_number(s):
     """
     try:
         float(s)
-        if int(s) > 0:
+        if float(s) > 0:
             return True
         return False
     except ValueError:
@@ -28,7 +28,7 @@ with open(test_file, 'rb') as csvfile:
     reader = DictReader(csvfile, dialect=file_dialect)
     csvfile.seek(0)
 
-    column = 'A'
+    column = 'C'
     for row in reader:
         value = row.get(column)
         if not valid_number(value):
