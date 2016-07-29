@@ -1,0 +1,7 @@
+To-Do
+=====
+DataParser
+- Convert "Time" values to a human-readable format
+	-- Epoch Batch Converter(http://www.epochconverter.com/batch)
+- Work out object structure
+	-- Data placed in a dictionary or list? Neither?
