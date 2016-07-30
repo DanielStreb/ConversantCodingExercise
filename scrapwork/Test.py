@@ -1,11 +1,14 @@
-"""CSV File Reader."""
+"""Test File."""
 
 from csv import Sniffer, DictReader
 
+import numpy as np
+import pylab as pl
+
 # Take file name as raw string
-# test_file = r'DummyData.csv'
-# test_file = r'DummyData(negative numbers+decimal numbers+letters).csv'
 test_file = r'Data(Relevant).csv'
+
+# List of valid data centers
 dataCenters = ('I', 'A', 'S')
 
 
@@ -37,7 +40,7 @@ def create_reader(csvfile=None):
     return reader
 
 
-def valid_number(s):
+def valid_number(number):
     """
     Summary: Checks that value is a valid positive number.
 
@@ -46,31 +49,74 @@ def valid_number(s):
     try:
         # Checking that entered value can be converted to a float.
         # Excludes letters and symbols.
-        float(s)
+        float(number)
 
         # Checking that validated number is nonnegative.
-        if float(s) > 0:
+        if float(number) > 0:
             return True
         return False
     except ValueError:
         return False
 
-# Opening data binary file for reading, hence 'rb', as 'csvfile'.
-with open(test_file, 'rb') as csvfile:
-    # Creates a reader object for later data manipulation
-    reader = create_reader(csvfile)
 
-    # Resetting read/write pointer to beginning of file
-    csvfile.seek(0)
+def create_dc_graph_dataset(reader=None, data_centers=None):
+    """
+    Summary: Creates a dataset of dcs and their respective times, values.
 
-    goodRecords = []
-    ignoredRecords = []
+    Arguments: 'reader' defines a reader object used to read a csv file.
+    'dataCenters' is a list containing data center names that are to be
+    graphed.
+    """
+    dcs_to_graph = []
+    ignored_records = []
+
+    for dc in data_centers:
+        dcs_to_graph.append({'Name': dc, 'Time_data': [], 'Value_data': []})
 
     for row in reader:
         # Checking that the 'DC' matches one defined in "dataCenters" list
         if row.get('DC') in dataCenters:
             # Validating DC's recorded value is a positive nonnegative number.
             if not valid_number(row.get('Value')):
-                ignoredRecords.append(row)
+                ignored_records.append(row)  # Archiving ignored records
             else:
-                goodRecords.append(row)
+                for data_cent in dcs_to_graph:
+                    if data_cent['Name'] == row.get('DC'):
+                        data_cent['Time_data'].append(float(row.get('Time')))
+                        data_cent['Value_data'].append(float(row.get('Value')))
+
+    return dcs_to_graph
+
+
+def graph_dataset(dc_dataset_to_graph=None):
+    """
+    Summary: function that graphs data center dataset.
+
+    Arguments: 'dc_dataset_to_graph' is a list containing dictionary
+    instances holding specific datacenter attributes for value and time
+    """
+    for dc in dc_dataset_to_graph:
+        # Making an array of x values(time axis)
+        x = dc['Time_data']
+        # Making an array of y values(value axis)
+        y = dc['Value_data']
+
+        # Using pylab to plot time(x) vs. value(y) as red circles
+        pl.plot(x, y, 'ro')
+
+        # Displaying plot on the screen
+        pl.show()
+
+# Opening data binary file for reading, hence 'rb', as 'csvfile'.
+with open(test_file, 'r') as csvfile:
+    # Creates a reader object for later data manipulation
+    reader = create_reader(csvfile)
+
+    # Resetting read/write pointer to beginning of file
+    csvfile.seek(0)
+
+    # Creating list for graphing data center's dataset
+    dcs_to_graph = create_dc_graph_dataset(reader, dataCenters)
+
+    # Graphing Data Center Data
+    graph_dataset(dcs_to_graph)
