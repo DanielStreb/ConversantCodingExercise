@@ -67,24 +67,24 @@ with open(test_file, 'rb') as csvfile:
     ignoredRecords = []
 
     for dc in dataCenters:
-        dcs_to_graph.append({'Name': dc, 'Times': [], 'Values': []})
+        dcs_to_graph.append({'Name': dc, 'Time_data': [], 'Value_data': []})
 
     for row in reader:
         # Checking that the 'DC' matches one defined in "dataCenters" list
         if row.get('DC') in dataCenters:
             # Validating DC's recorded value is a positive nonnegative number.
             if not valid_number(row.get('Value')):
-                ignoredRecords.append(row)
+                ignoredRecords.append(row)  # Archiving ignored records
             else:
-                for dc in dcs_to_graph:
-                    if dc['Name'] == row.get('DC'):
-                        dc['Times'].append(float(row.get('Time')))
-                        dc['Values'].append(float(row.get('Value')))
+                for data_center in dcs_to_graph:
+                    if data_center['Name'] == row.get('DC'):
+                        data_center['Time_data'].append(float(row.get('Time')))
+                        data_center['Value_data'].append(float(row.get('Value')))
 
-    for dc in dcs_to_graph:
-        print(dc['Name'])
-        print(max(dc['Times']))
-        print(max(dc['Values']))
+    for data_center in dcs_to_graph:
+        print(data_center['Name'])
+        print(max(data_center['Times']))
+        print(max(data_center['Values']))
 
 """with open(test_file, 'rb') as csvfile:
     try:
