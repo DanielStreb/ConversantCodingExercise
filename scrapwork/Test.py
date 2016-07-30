@@ -95,12 +95,23 @@ def graph_dataset(dc_dataset_to_graph=None):
     Arguments: 'dc_dataset_to_graph' is a list containing dictionary
     instances holding specific datacenter attributes for value and time
     """
-    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
-    graphed_dcs = ""
+    # List storing tuples of color values and names for use in graph title
+    colors = [
+        ('b', 'blue'), ('g', 'green'), ('r', 'red'),
+        ('c', 'cyan'), ('m', 'magenta'), ('y', 'yellow'),
+        ('k', 'black'), ('w', 'white')
+    ]
+
+    # Declaring empty data centers' graph title string
+    graphed_dcs_title = "Data Centers: "
 
     for i, dc in enumerate(dc_dataset_to_graph):
+        # Modding i by 8 to maintain valid index range
+        # in colors list(contains 8 colors).
+        index = i % 8
+
         # Line_color variable for varying line color among graphed data
-        line_color = colors[i % 8]
+        line_color = colors[index][0]
 
         # Making an array of x values(time axis)
         x = dc['Time_data']
@@ -110,10 +121,12 @@ def graph_dataset(dc_dataset_to_graph=None):
         # Using pylab to plot time(x) vs. value(y) as red circles
         pl.plot(x, y, line_color)
 
-        graphed_dcs += dc['Name'] + ', '
+        # Appending Data Center Names and associated line color for
+        # valid graph title.
+        graphed_dcs_title += dc['Name'] + '({}), '.format(colors[index][1])
 
     # Giving scatterplot a title
-    pl.title('Data Centers: {}'.format(graphed_dcs))
+    pl.title(graphed_dcs_title)
     # Making axis labels
     pl.xlabel('Time axis')
     pl.ylabel('Value axis')
