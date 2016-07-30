@@ -37,7 +37,7 @@ def create_reader(csvfile=None):
     return reader
 
 
-def valid_number(s):
+def valid_number(number):
     """
     Summary: Checks that value is a valid positive number.
 
@@ -46,10 +46,10 @@ def valid_number(s):
     try:
         # Checking that entered value can be converted to a float.
         # Excludes letters and symbols.
-        float(s)
+        float(number)
 
         # Checking that validated number is nonnegative.
-        if float(s) > 0:
+        if float(number) > 0:
             return True
         return False
     except ValueError:
