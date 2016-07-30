@@ -103,7 +103,10 @@ def graph_dataset(dc_dataset_to_graph=None):
     ]
 
     # Declaring empty data centers' graph title string
-    graphed_dcs_title = "Data Centers: "
+    graph_title = "Data Centers: "
+
+    # List to keep track of plotted data centers for legend creation
+    plotted_dc = []
 
     for i, dc in enumerate(dc_dataset_to_graph):
         # Modding i by 8 to maintain valid index range
@@ -123,13 +126,19 @@ def graph_dataset(dc_dataset_to_graph=None):
 
         # Appending Data Center Names and associated line color for
         # valid graph title.
-        graphed_dcs_title += dc['Name'] + '({}), '.format(colors[index][1])
+        graph_title += dc['Name'] + '({})  '.format(colors[index][1])
+
+        # Adding data center name to plotted list for dynamic legend creation
+        plotted_dc.append(dc['Name'])
 
     # Giving scatterplot a title
-    pl.title(graphed_dcs_title)
+    pl.title(graph_title)
     # Making axis labels
     pl.xlabel('Time axis')
     pl.ylabel('Value axis')
+
+    # Making a legend for the graph
+    pl.legend(['Data Center: ' + dc for dc in plotted_dc])
 
     # Displaying plot on the screen
     pl.show()
