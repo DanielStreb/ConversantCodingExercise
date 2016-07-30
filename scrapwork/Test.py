@@ -96,10 +96,12 @@ def graph_dataset(dc_dataset_to_graph=None):
     instances holding specific datacenter attributes for value and time
     """
     colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
+    graphed_dcs = ""
 
     for i, dc in enumerate(dc_dataset_to_graph):
-
+        # Line_color variable for varying line color among graphed data
         line_color = colors[i % 8]
+
         # Making an array of x values(time axis)
         x = dc['Time_data']
         # Making an array of y values(value axis)
@@ -108,7 +110,15 @@ def graph_dataset(dc_dataset_to_graph=None):
         # Using pylab to plot time(x) vs. value(y) as red circles
         pl.plot(x, y, line_color)
 
-        # Displaying plot on the screen
+        graphed_dcs += dc['Name'] + ', '
+
+    # Giving scatterplot a title
+    pl.title('Data Centers: {}'.format(graphed_dcs))
+    # Making axis labels
+    pl.xlabel('Time axis')
+    pl.ylabel('Value axis')
+
+    # Displaying plot on the screen
     pl.show()
 
 # Opening data binary file for reading, hence 'rb', as 'csvfile'.
