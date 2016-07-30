@@ -55,6 +55,36 @@ def valid_number(s):
     except ValueError:
         return False
 
+
+def create_dc_graph_dataset(reader=None, data_centers=None):
+    """
+    Summary: Creates a dataset of dcs and their respective times, values.
+
+    Arguments: 'reader' defines a reader object used to read a csv file.
+    'dataCenters' is a list containing data center names that are to be
+    graphed.
+    """
+    dcs_to_graph = []
+    ignored_records = []
+
+    for dc in data_centers:
+        dcs_to_graph.append({'Name': dc, 'Time_data': [], 'Value_data': []})
+
+    for row in reader:
+        # Checking that the 'DC' matches one defined in "dataCenters" list
+        if row.get('DC') in dataCenters:
+            # Validating DC's recorded value is a positive nonnegative number.
+            if not valid_number(row.get('Value')):
+                ignored_records.append(row)  # Archiving ignored records
+            else:
+                for data_cent in dcs_to_graph:
+                    if data_cent['Name'] == row.get('DC'):
+                        data_cent['Time_data'].append(float(row.get('Time')))
+                        data_cent['Value_data'].append(float(row.get('Value')))
+
+    return dcs_to_graph
+
+
 # Opening data binary file for reading, hence 'rb', as 'csvfile'.
 with open(test_file, 'rb') as csvfile:
     # Creates a reader object for later data manipulation
@@ -63,28 +93,13 @@ with open(test_file, 'rb') as csvfile:
     # Resetting read/write pointer to beginning of file
     csvfile.seek(0)
 
-    dcs_to_graph = []
-    ignoredRecords = []
+    # Creating list for graphing data center's dataset
+    dcs_to_graph = create_dc_graph_dataset(reader, dataCenters)
 
-    for dc in dataCenters:
-        dcs_to_graph.append({'Name': dc, 'Time_data': [], 'Value_data': []})
-
-    for row in reader:
-        # Checking that the 'DC' matches one defined in "dataCenters" list
-        if row.get('DC') in dataCenters:
-            # Validating DC's recorded value is a positive nonnegative number.
-            if not valid_number(row.get('Value')):
-                ignoredRecords.append(row)  # Archiving ignored records
-            else:
-                for data_center in dcs_to_graph:
-                    if data_center['Name'] == row.get('DC'):
-                        data_center['Time_data'].append(float(row.get('Time')))
-                        data_center['Value_data'].append(float(row.get('Value')))
-
-    for data_center in dcs_to_graph:
-        print(data_center['Name'])
-        print(max(data_center['Times']))
-        print(max(data_center['Values']))
+    for data_cent in dcs_to_graph:
+        print(data_cent['Name'])
+        print(max(data_cent['Time_data']))
+        print(max(data_cent['Value_data']))
 
 """with open(test_file, 'rb') as csvfile:
     try:
