@@ -4,6 +4,7 @@ from csv import Sniffer, DictReader
 
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
+import random
 
 from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
 
@@ -105,14 +106,26 @@ def graph_dataset(dc_dataset_to_graph=None):
     time_fmt = DateFormatter('%H:%M%p %x')
     fig, ax = plt.subplots()
 
+    xmax = None
+    ymax = None
+
     for dc in dc_dataset_to_graph:
 
         # Making an array of x values(time axis)
         x = [dt.epoch2num(time) for time in dc['Time_data']]
+        xmax = random.choice(x)
         # Making an array of y values(value axis)
         y = dc['Value_data']
+        ymax = max(y)
 
         ax.plot_date(x, y, xdate=True)
+
+        plt.annotate(
+            s=dc['Name'] + ' Max Value',
+            xy=(xmax, ymax),
+            xytext=(xmax + 0.1, ymax + 20),
+            arrowprops=dict(facecolor='black', shrink=0.05),
+        )
 
         # Adding data center name to plotted list for dynamic legend creation
         plotted_dc.append(dc['Name'])
