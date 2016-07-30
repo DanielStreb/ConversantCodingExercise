@@ -1,8 +1,12 @@
-"""CSV File Reader."""
+"""Test File."""
 
 from csv import Sniffer, DictReader
 
-import pylab as pl
+import matplotlib.dates as dt
+import matplotlib.pyplot as plt
+import random
+
+from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
 
 # Take file name as raw string
 test_file = r'Data(Relevant).csv'
@@ -94,53 +98,58 @@ def graph_dataset(dc_dataset_to_graph=None):
     Arguments: 'dc_dataset_to_graph' is a list containing dictionary
     instances holding specific datacenter attributes for value and time
     """
-    # List storing tuples of color values and names for use in graph title
-    colors = [
-        ('b', 'blue'), ('g', 'green'), ('r', 'red'),
-        ('c', 'cyan'), ('m', 'magenta'), ('y', 'yellow'),
-        ('k', 'black'), ('w', 'white')
-    ]
-
-    # Declaring empty data centers' graph title string
-    graph_title = "Data Centers: "
-
     # List to keep track of plotted data centers for legend creation
     plotted_dc = []
 
-    for i, dc in enumerate(dc_dataset_to_graph):
-        # Modding i by 8 to maintain valid index range
-        # in colors list(contains 8 colors).
-        index = i % 8
+    hours = HourLocator(byhour=range(24), interval=2)
+    minutes = MinuteLocator(byminute=range(60), interval=30)
+    time_fmt = DateFormatter('%H:%M%p %x')
+    fig, ax = plt.subplots()
 
-        # Line_color variable for varying line color among graphed data
-        line_color = colors[index][0]
+    xmax = None
+    ymax = None
+
+    for dc in dc_dataset_to_graph:
 
         # Making an array of x values(time axis)
-        x = dc['Time_data']
+        x = [dt.epoch2num(time) for time in dc['Time_data']]
+        xmax = random.choice(x)
         # Making an array of y values(value axis)
         y = dc['Value_data']
+        ymax = max(y)
 
-        # Using pylab to plot time(x) vs. value(y) as red circles
-        pl.plot(x, y, line_color)
+        ax.plot_date(x, y, xdate=True)
 
-        # Appending Data Center Names and associated line color for
-        # dynamic graph title.
-        graph_title += dc['Name'] + '({})  '.format(colors[index][1])
+        plt.annotate(
+            s=dc['Name'] + ' Max Value',
+            xy=(xmax, ymax),
+            xytext=(xmax + 0.1, ymax + 20),
+            arrowprops=dict(facecolor='black', shrink=0.05),
+        )
 
         # Adding data center name to plotted list for dynamic legend creation
         plotted_dc.append(dc['Name'])
 
+    ax.xaxis.set_major_locator(hours)
+    ax.xaxis.set_major_formatter(time_fmt)
+    ax.xaxis.set_minor_locator(minutes)
+    ax.autoscale_view()
+
+    ax.fmt_xdata = DateFormatter('%A %b %d %H:%M%p')
+    ax.grid(True)
+
+    fig.autofmt_xdate()
+
     # Giving scatterplot a title
-    pl.title(graph_title)
+    plt.title("Data Centers(Value vs. Time)")
     # Making axis labels
-    pl.xlabel('Time axis')
-    pl.ylabel('Value axis')
+    plt.xlabel('Time')
+    plt.ylabel('Value')
 
     # Making a legend for the graph
-    pl.legend(['Data Center: ' + dc for dc in plotted_dc])
+    plt.legend(['Data Center: ' + dc for dc in plotted_dc])
 
-    # Displaying plot on the screen
-    pl.show()
+    plt.show()
 
 # Opening data binary file for reading, hence 'rb', as 'csvfile'.
 with open(test_file, 'r') as csvfile:
@@ -155,14 +164,3 @@ with open(test_file, 'r') as csvfile:
 
     # Graphing Data Center Data
     graph_dataset(dcs_to_graph)
-
-
-"""with open(test_file, 'rb') as csvfile:
-    try:
-        if not Sniffer().has_header(csvfile.read(1024)):
-            raise NameError("No header row in file detected")
-    except NameError:
-        print('An exception flew by!')
-        raise
-    print("Header: {}".format(Sniffer().has_header(csvfile.read(1024))))
-"""
