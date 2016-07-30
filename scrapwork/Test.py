@@ -95,17 +95,21 @@ def graph_dataset(dc_dataset_to_graph=None):
     Arguments: 'dc_dataset_to_graph' is a list containing dictionary
     instances holding specific datacenter attributes for value and time
     """
-    for dc in dc_dataset_to_graph:
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
+
+    for i, dc in enumerate(dc_dataset_to_graph):
+
+        line_color = colors[i % 8]
         # Making an array of x values(time axis)
         x = dc['Time_data']
         # Making an array of y values(value axis)
         y = dc['Value_data']
 
         # Using pylab to plot time(x) vs. value(y) as red circles
-        pl.plot(x, y, 'ro')
+        pl.plot(x, y, line_color)
 
         # Displaying plot on the screen
-        pl.show()
+    pl.show()
 
 # Opening data binary file for reading, hence 'rb', as 'csvfile'.
 with open(test_file, 'r') as csvfile:
