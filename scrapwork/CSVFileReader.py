@@ -28,8 +28,15 @@ def create_reader(csvfile=None):
 
     # Checks to see that the csv file imported has a header row,
     # that will be used for later parsing.
-    print("Header: {}".format(Sniffer().has_header(csvfile.read(1024))))
-    print('Delimiter: "{}"'.format(file_dialect.delimiter))
+    print(
+        "\tFile has Header: {}".format(
+            Sniffer().has_header(csvfile.read(1024))
+        )
+    )
+    print(
+        '\tFile Delimiter: "{}"'.format(
+            file_dialect.delimiter)
+    )
 
     # Resets the read/write pointer within the file
     csvfile.seek(0)
@@ -42,7 +49,7 @@ def create_reader(csvfile=None):
     return reader
 
 
-def valid_number(number):
+def valid_value(number):
     """
     Summary: Checks that value is a valid positive number.
 
@@ -73,10 +80,10 @@ def create_dc_dataset(reader=None, data_centers=None):
     ignored_records = []
 
     for row in reader:
-        # Checking that the 'DC' matches one defined in "dataCenters" list
-        if row.get('DC') in dataCenters:
+        # Checking that the 'DC' matches one defined in "data_centers" list
+        if row.get('DC') in data_centers:
             # Validating DC's recorded value is a positive nonnegative number.
-            if not valid_number(row.get('Value')):
+            if not valid_value(row.get('Value')):
                 ignored_records.append(row)  # Archiving ignored records
             else:
                 accepted_records.append(
@@ -91,7 +98,7 @@ def create_dc_dataset(reader=None, data_centers=None):
 
 
 def plot_dc(name=None, records=[], ax=None):
-    """Some function."""
+    """Function to plot data for a specified Data Center."""
     values = []
     times = []
     for r in records[:]:
@@ -123,12 +130,6 @@ def graph_dataset(dc_dataset_to_graph=None):
         plot_dc(dc, dc_dataset_to_graph, ax)
         plotted_dc.append(dc)
 
-    #  plt.annotate(
-    #  s=record[dc_name] + ' Max Value',
-    #  xy=(xmax, ymax),
-    #  xytext=(xmax + 0.1, ymax + 20),
-    #  arrowprops=dict(facecolor='black', shrink=0.05),
-    #  )
     ax.xaxis.set_major_locator(hours)
     ax.xaxis.set_major_formatter(time_fmt)
     ax.xaxis.set_minor_locator(minutes)
