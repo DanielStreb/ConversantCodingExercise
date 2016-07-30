@@ -63,8 +63,11 @@ with open(test_file, 'rb') as csvfile:
     # Resetting read/write pointer to beginning of file
     csvfile.seek(0)
 
-    goodRecords = []
+    dcs_to_graph = []
     ignoredRecords = []
+
+    for dc in dataCenters:
+        dcs_to_graph.append({'Name': dc, 'Times': [], 'Values': []})
 
     for row in reader:
         # Checking that the 'DC' matches one defined in "dataCenters" list
@@ -73,8 +76,15 @@ with open(test_file, 'rb') as csvfile:
             if not valid_number(row.get('Value')):
                 ignoredRecords.append(row)
             else:
-                goodRecords.append(row)
+                for dc in dcs_to_graph:
+                    if dc['Name'] == row.get('DC'):
+                        dc['Times'].append(float(row.get('Time')))
+                        dc['Values'].append(float(row.get('Value')))
 
+    for dc in dcs_to_graph:
+        print(dc['Name'])
+        print(max(dc['Times']))
+        print(max(dc['Values']))
 
 """with open(test_file, 'rb') as csvfile:
     try:
