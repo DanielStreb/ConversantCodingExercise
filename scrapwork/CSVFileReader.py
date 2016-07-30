@@ -33,12 +33,6 @@ def create_reader(data=None):
         # dialect object to define the parameters of the reader instance.
         reader = DictReader(csvfile, dialect=file_dialect)
 
-        # Turn this block into a function for filtering columns of data
-        column = 'Time'
-        for row in reader:
-            print(row.get(column))  # Returns all values from column.
-            # print(row['Time'])
-
         # Return DictReader object
         return reader
 
@@ -54,4 +48,3 @@ def create_reader(data=None):
         raise
     print("Header: {}".format(Sniffer().has_header(csvfile.read(1024))))
 """
-
