@@ -68,7 +68,7 @@ def valid_value(number):
         return False
 
 
-def create_dc_dataset(reader=None, data_centers=None):
+def create_dataset(reader=None, data_centers=None):
     """
     Summary: Creates a dataset of dcs and their respective times, values.
 
@@ -97,7 +97,7 @@ def create_dc_dataset(reader=None, data_centers=None):
     return accepted_records
 
 
-def plot_dc(name=None, records=[], ax=None):
+def plot_dataset(name=None, records=[], ax=None):
     """Function to plot data for a specified Data Center."""
     values = []
     times = []
@@ -127,7 +127,7 @@ def graph_dataset(dc_dataset_to_graph=None):
     fig, ax = plt.subplots()
 
     for dc in dataCenters:
-        plot_dc(dc, dc_dataset_to_graph, ax)
+        plot_dataset(dc, dc_dataset_to_graph, ax)
         plotted_dc.append(dc)
 
     ax.xaxis.set_major_locator(hours)
@@ -160,7 +160,7 @@ with open(test_file, 'r') as csvfile:
     csvfile.seek(0)
 
     # Creating list for graphing data center's dataset
-    accepted_records = create_dc_dataset(reader, dataCenters)
+    accepted_records = create_dataset(reader, dataCenters)
 
     # Graphing Data Center Data
     graph_dataset(accepted_records)
