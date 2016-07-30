@@ -6,7 +6,7 @@ from csv import Sniffer, DictReader
 # test_file = r'DummyData.csv'
 # test_file = r'DummyData(negative numbers+decimal numbers+letters).csv'
 test_file = r'Data(Relevant).csv'
-dataCenters = ['I', 'A', 'S']
+dataCenters = ('I', 'A', 'S')
 
 
 def create_reader(csvfile=None):
@@ -57,10 +57,7 @@ def valid_number(s):
 
 # Opening data binary file for reading, hence 'rb', as 'csvfile'.
 with open(test_file, 'rb') as csvfile:
-    # Resetting read/write pointer to beginning of file
-    csvfile.seek(0)
-
-    # reader = DictReader(csvfile, dialect=file_dialect)
+    # Creates a reader object for later data manipulation
     reader = create_reader(csvfile)
 
     # Resetting read/write pointer to beginning of file
@@ -70,9 +67,10 @@ with open(test_file, 'rb') as csvfile:
     ignoredRecords = []
 
     for row in reader:
+        # Checking that the 'DC' matches one defined in "dataCenters" list
         if row.get('DC') in dataCenters:
-            value = row.get('Value')
-            if not valid_number(value):
+            # Validating DC's recorded value is a positive nonnegative number.
+            if not valid_number(row.get('Value')):
                 ignoredRecords.append(row)
             else:
                 goodRecords.append(row)
