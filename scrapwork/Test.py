@@ -128,7 +128,7 @@ def graph_dataset(dc_dataset_to_graph=None):
     fig.autofmt_xdate()
 
     # Giving scatterplot a title
-    plt.title("Data Centers(Values vs. Time)")
+    plt.title("Data Centers(Value vs. Time)")
     # Making axis labels
     plt.xlabel('Time')
     plt.ylabel('Value')
@@ -137,6 +137,7 @@ def graph_dataset(dc_dataset_to_graph=None):
     plt.legend(['Data Center: ' + dc for dc in plotted_dc])
 
     plt.show()
+
 # Opening data binary file for reading, hence 'rb', as 'csvfile'.
 with open(test_file, 'r') as csvfile:
     # Creates a reader object for later data manipulation
