@@ -2,6 +2,9 @@
 
 from csv import Sniffer, DictReader
 
+# import numpy as np
+# import pylab as pl
+
 # Take file name as raw string
 test_file = r'Data(Relevant).csv'
 
@@ -100,6 +103,7 @@ with open(test_file, 'rb') as csvfile:
         print(data_cent['Name'])
         print(max(data_cent['Time_data']))
         print(max(data_cent['Value_data']))
+
 
 """with open(test_file, 'rb') as csvfile:
     try:
