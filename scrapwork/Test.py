@@ -4,6 +4,13 @@ from csv import Sniffer, DictReader
 
 import numpy as np
 import pylab as pl
+import matplotlib.dates as dt
+import matplotlib.pyplot as plt
+
+from calendar import timegm
+from datetime import datetime
+
+from pytz import utc
 
 # Take file name as raw string
 test_file = r'Data(Relevant).csv'
@@ -59,7 +66,7 @@ def valid_number(number):
         return False
 
 
-def create_dc_graph_dataset(reader=None, data_centers=None):
+def create_dc_dataset(reader=None, data_centers=None):
     """
     Summary: Creates a dataset of dcs and their respective times, values.
 
@@ -96,53 +103,15 @@ def graph_dataset(dc_dataset_to_graph=None):
     instances holding specific datacenter attributes for value and time
     """
     # List storing tuples of color values and names for use in graph title
-    colors = [
-        ('b', 'blue'), ('g', 'green'), ('r', 'red'),
-        ('c', 'cyan'), ('m', 'magenta'), ('y', 'yellow'),
-        ('k', 'black'), ('w', 'white')
-    ]
-
-    # Declaring empty data centers' graph title string
-    graph_title = "Data Centers: "
-
-    # List to keep track of plotted data centers for legend creation
-    plotted_dc = []
-
     for i, dc in enumerate(dc_dataset_to_graph):
-        # Modding i by 8 to maintain valid index range
-        # in colors list(contains 8 colors).
-        index = i % 8
-
-        # Line_color variable for varying line color among graphed data
-        line_color = colors[index][0]
-
         # Making an array of x values(time axis)
         x = dc['Time_data']
+        x = [dt.epoch2num(u) for u in x]
         # Making an array of y values(value axis)
         y = dc['Value_data']
 
-        # Using pylab to plot time(x) vs. value(y) as red circles
-        pl.plot(x, y, line_color)
-
-        # Appending Data Center Names and associated line color for
-        # valid graph title.
-        graph_title += dc['Name'] + '({})  '.format(colors[index][1])
-
-        # Adding data center name to plotted list for dynamic legend creation
-        plotted_dc.append(dc['Name'])
-
-    # Giving scatterplot a title
-    pl.title(graph_title)
-    # Making axis labels
-    pl.xlabel('Time axis')
-    pl.ylabel('Value axis')
-
-    # Making a legend for the graph
-    pl.legend(['Data Center: ' + dc for dc in plotted_dc])
-
-    # Displaying plot on the screen
-    pl.show()
-
+        plt.plot_date(x, y, fmt='ro', tz='utc', xdate=True)
+    plt.show()
 # Opening data binary file for reading, hence 'rb', as 'csvfile'.
 with open(test_file, 'r') as csvfile:
     # Creates a reader object for later data manipulation
@@ -152,7 +121,7 @@ with open(test_file, 'r') as csvfile:
     csvfile.seek(0)
 
     # Creating list for graphing data center's dataset
-    dcs_to_graph = create_dc_graph_dataset(reader, dataCenters)
+    dcs_to_graph = create_dc_dataset(reader, dataCenters)
 
     # Graphing Data Center Data
     graph_dataset(dcs_to_graph)
