@@ -2,17 +2,10 @@
 
 from csv import Sniffer, DictReader
 
-import numpy as np
-import pylab as pl
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
 
 from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
-
-from calendar import timegm
-from datetime import datetime
-
-from pytz import utc
 
 # Take file name as raw string
 test_file = r'Data(Relevant).csv'
@@ -104,22 +97,26 @@ def graph_dataset(dc_dataset_to_graph=None):
     Arguments: 'dc_dataset_to_graph' is a list containing dictionary
     instances holding specific datacenter attributes for value and time
     """
-    # List storing tuples of color values and names for use in graph title
+    # List to keep track of plotted data centers for legend creation
+    plotted_dc = []
 
     hours = HourLocator(byhour=range(24), interval=2)
     minutes = MinuteLocator(byminute=range(60), interval=30)
     time_fmt = DateFormatter('%H:%M%p %x')
     fig, ax = plt.subplots()
 
-    for i, dc in enumerate(dc_dataset_to_graph):
+    for dc in dc_dataset_to_graph:
 
         # Making an array of x values(time axis)
-        x = dc['Time_data']
-        x = [dt.epoch2num(u) for u in x]
+        x = [dt.epoch2num(time) for time in dc['Time_data']]
         # Making an array of y values(value axis)
         y = dc['Value_data']
 
         ax.plot_date(x, y, xdate=True)
+
+        # Adding data center name to plotted list for dynamic legend creation
+        plotted_dc.append(dc['Name'])
+
     ax.xaxis.set_major_locator(hours)
     ax.xaxis.set_major_formatter(time_fmt)
     ax.xaxis.set_minor_locator(minutes)
@@ -129,6 +126,15 @@ def graph_dataset(dc_dataset_to_graph=None):
     ax.grid(True)
 
     fig.autofmt_xdate()
+
+    # Giving scatterplot a title
+    plt.title("Data Centers(Values vs. Time)")
+    # Making axis labels
+    plt.xlabel('Time')
+    plt.ylabel('Value')
+
+    # Making a legend for the graph
+    plt.legend(['Data Center: ' + dc for dc in plotted_dc])
 
     plt.show()
 # Opening data binary file for reading, hence 'rb', as 'csvfile'.
