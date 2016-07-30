@@ -106,9 +106,9 @@ def graph_dataset(dc_dataset_to_graph=None):
     """
     # List storing tuples of color values and names for use in graph title
 
-    hours = HourLocator(byhour=range(24), interval=1)
+    hours = HourLocator(byhour=range(24), interval=2)
     minutes = MinuteLocator(byminute=range(60), interval=30)
-    time_fmt = DateFormatter('%H:%M')
+    time_fmt = DateFormatter('%H:%M%p %x')
     fig, ax = plt.subplots()
 
     for i, dc in enumerate(dc_dataset_to_graph):
@@ -125,8 +125,7 @@ def graph_dataset(dc_dataset_to_graph=None):
     ax.xaxis.set_minor_locator(minutes)
     ax.autoscale_view()
 
-    ax.fmt_xdata = DateFormatter('%H:%M')
-
+    ax.fmt_xdata = DateFormatter('%A %b %d %H:%M%p')
     ax.grid(True)
 
     fig.autofmt_xdate()
