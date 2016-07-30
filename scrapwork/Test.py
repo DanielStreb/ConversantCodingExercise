@@ -7,6 +7,8 @@ import pylab as pl
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
 
+from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
+
 from calendar import timegm
 from datetime import datetime
 
@@ -103,14 +105,32 @@ def graph_dataset(dc_dataset_to_graph=None):
     instances holding specific datacenter attributes for value and time
     """
     # List storing tuples of color values and names for use in graph title
+
+    hours = HourLocator(byhour=range(24), interval=1)
+    minutes = MinuteLocator(byminute=range(60), interval=30)
+    time_fmt = DateFormatter('%H:%M')
+    fig, ax = plt.subplots()
+
     for i, dc in enumerate(dc_dataset_to_graph):
+
         # Making an array of x values(time axis)
         x = dc['Time_data']
         x = [dt.epoch2num(u) for u in x]
         # Making an array of y values(value axis)
         y = dc['Value_data']
 
-        plt.plot_date(x, y, fmt='ro', tz='utc', xdate=True)
+        ax.plot_date(x, y, xdate=True)
+    ax.xaxis.set_major_locator(hours)
+    ax.xaxis.set_major_formatter(time_fmt)
+    ax.xaxis.set_minor_locator(minutes)
+    ax.autoscale_view()
+
+    ax.fmt_xdata = DateFormatter('%H:%M')
+
+    ax.grid(True)
+
+    fig.autofmt_xdate()
+
     plt.show()
 # Opening data binary file for reading, hence 'rb', as 'csvfile'.
 with open(test_file, 'r') as csvfile:
