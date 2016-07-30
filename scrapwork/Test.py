@@ -4,7 +4,6 @@ from csv import Sniffer, DictReader
 
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
-import random
 
 from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
 
@@ -70,11 +69,8 @@ def create_dc_dataset(reader=None, data_centers=None):
     'dataCenters' is a list containing data center names that are to be
     graphed.
     """
-    dcs_to_graph = []
+    accepted_records = []
     ignored_records = []
-
-    for dc in data_centers:
-        dcs_to_graph.append({'Name': dc, 'Time_data': [], 'Value_data': []})
 
     for row in reader:
         # Checking that the 'DC' matches one defined in "dataCenters" list
@@ -83,12 +79,29 @@ def create_dc_dataset(reader=None, data_centers=None):
             if not valid_number(row.get('Value')):
                 ignored_records.append(row)  # Archiving ignored records
             else:
-                for data_cent in dcs_to_graph:
-                    if data_cent['Name'] == row.get('DC'):
-                        data_cent['Time_data'].append(float(row.get('Time')))
-                        data_cent['Value_data'].append(float(row.get('Value')))
+                accepted_records.append(
+                    [
+                        row.get('DC'),
+                        float(row.get('Time')),
+                        float(row.get('Value'))
+                    ]
+                )
 
-    return dcs_to_graph
+    return accepted_records
+
+
+def plot_dc(name=None, records=[], ax=None):
+    """Some function."""
+    values = []
+    times = []
+    for r in records[:]:
+        if r[0] == name:
+            times.append(dt.epoch2num(r[1]))
+            values.append(r[2])
+            records.remove(r)
+        else:
+            pass
+    ax.plot_date(times, values, xdate=True)
 
 
 def graph_dataset(dc_dataset_to_graph=None):
@@ -106,30 +119,16 @@ def graph_dataset(dc_dataset_to_graph=None):
     time_fmt = DateFormatter('%H:%M%p %x')
     fig, ax = plt.subplots()
 
-    xmax = None
-    ymax = None
+    for dc in dataCenters:
+        plot_dc(dc, dc_dataset_to_graph, ax)
+        plotted_dc.append(dc)
 
-    for dc in dc_dataset_to_graph:
-
-        # Making an array of x values(time axis)
-        x = [dt.epoch2num(time) for time in dc['Time_data']]
-        xmax = random.choice(x)
-        # Making an array of y values(value axis)
-        y = dc['Value_data']
-        ymax = max(y)
-
-        ax.plot_date(x, y, xdate=True)
-
-        plt.annotate(
-            s=dc['Name'] + ' Max Value',
-            xy=(xmax, ymax),
-            xytext=(xmax + 0.1, ymax + 20),
-            arrowprops=dict(facecolor='black', shrink=0.05),
-        )
-
-        # Adding data center name to plotted list for dynamic legend creation
-        plotted_dc.append(dc['Name'])
-
+    #  plt.annotate(
+    #  s=record[dc_name] + ' Max Value',
+    #  xy=(xmax, ymax),
+    #  xytext=(xmax + 0.1, ymax + 20),
+    #  arrowprops=dict(facecolor='black', shrink=0.05),
+    #  )
     ax.xaxis.set_major_locator(hours)
     ax.xaxis.set_major_formatter(time_fmt)
     ax.xaxis.set_minor_locator(minutes)
@@ -160,7 +159,7 @@ with open(test_file, 'r') as csvfile:
     csvfile.seek(0)
 
     # Creating list for graphing data center's dataset
-    dcs_to_graph = create_dc_dataset(reader, dataCenters)
+    accepted_records = create_dc_dataset(reader, dataCenters)
 
     # Graphing Data Center Data
-    graph_dataset(dcs_to_graph)
+    graph_dataset(accepted_records)
