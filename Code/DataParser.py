@@ -1,5 +1,6 @@
 """DataParser."""
 
+from sys import exit
 from csv import Sniffer, DictReader
 
 
@@ -53,12 +54,9 @@ class DataParser:
 
         # Checks to see that the csv file imported has a header row,
         # that will be used for later parsing.
-        print(
-            '\tFile has Header: {}\n\tFile Delimiter: "{}"'.format(
-                Sniffer().has_header(csvfile.read(1024)),
-                file_dialect.delimiter
-            )
-        )
+        if not Sniffer().has_header(csvfile.read(1024)):
+            print('Imported csv file lacks header row')
+            exit()
 
         # Resets the read/write pointer within the file
         csvfile.seek(0)
