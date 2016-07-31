@@ -111,31 +111,45 @@ def plot_dataset(name=None, dataset=[], ax=None):
     ax.plot_date(times, values, xdate=True)
 
 
-def graph_dataset(dc_dataset_to_graph=None):
+def graph_dataset(data_center_list=None, dataset_to_graph=None):
     """
     Summary: function that graphs data center dataset.
 
     Arguments: 'dc_dataset_to_graph' is a list containing dictionary
     instances holding specific datacenter attributes for value and time
     """
-    # List to keep track of plotted data centers for legend creation
+    # List of plotted data centers for dynamic legend creation
     plotted_dc = []
 
-    hours = HourLocator(byhour=range(24), interval=2)
-    minutes = MinuteLocator(byminute=range(60), interval=30)
-    time_fmt = DateFormatter('%H:%M%p %x')
+    # Creating figure and axes objects for display
     fig, ax = plt.subplots()
 
-    for dc in dataCenters:
-        plot_dataset(dc, dc_dataset_to_graph, ax)
+    # HourLocator creates major ticks every 2 hours in a 24 hour period
+    hours = HourLocator(byhour=range(24), interval=2)
+    # MinuteLocator creates minor ticks every 30 minutes in a 1 hour period
+    minutes = MinuteLocator(byminute=range(60), interval=30)
+
+    # Iterating through list of data centers to be plotted together.
+    for dc in data_center_list:
+        # For each data center, 'dc', plot it's data from dataset.
+        plot_dataset(dc, dataset_to_graph, ax)
+
+        # Add data center to list of plotted dcs for dynamic legend
         plotted_dc.append(dc)
+
+    # Creates format 'Hour:MinutePeriod Month/Day/Year' x-axis ticks
+    # Example: '5:30PM 9/23/15'
+    time_fmt = DateFormatter('%H:%M%p %x')
+
+    # Formats x-axis information 'Weekday Month Day Hour:MinutePeriod'
+    # Example: 'Tuesday Sep 23 12:15PM'
+    ax.fmt_xdata = DateFormatter('%A %b %d %H:%M%p')
 
     ax.xaxis.set_major_locator(hours)
     ax.xaxis.set_major_formatter(time_fmt)
     ax.xaxis.set_minor_locator(minutes)
     ax.autoscale_view()
 
-    ax.fmt_xdata = DateFormatter('%A %b %d %H:%M%p')
     ax.grid(True)
 
     fig.autofmt_xdate()
@@ -163,4 +177,4 @@ with open(test_file, 'r') as csvfile:
     accepted_records = create_dataset(reader, dataCenters)
 
     # Graphing Data Center Data
-    graph_dataset(accepted_records)
+    graph_dataset(dataCenters, accepted_records)
