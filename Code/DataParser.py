@@ -1,6 +1,7 @@
 """DataParser."""
 
 from csv import Sniffer, DictReader
+from Test import Grapher
 
 # Take file name as raw string
 test_file = r'Data(Relevant).csv'
@@ -103,3 +104,9 @@ class DataParser:
     def get_dataset(self):
         """Getter for accepted_records list."""
         return self.accepted_records
+
+dp = DataParser(test_file, dataCenters)
+dataset_to_graph = dp.get_dataset()
+gr = Grapher(dataset_to_graph)
+gr.graph_dataset(dataCenters)
+gr.graph_dataset(['I'])
