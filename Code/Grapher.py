@@ -2,7 +2,6 @@
 
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
-
 from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
 
 
