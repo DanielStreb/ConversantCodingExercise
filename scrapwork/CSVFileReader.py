@@ -14,6 +14,37 @@ test_file = r'Data(Relevant).csv'
 dataCenters = ('I', 'A', 'S')
 
 
+def format_axes(ax=None):
+    """
+    Summary: helper function for customizing graph display.
+
+    Create and set major/minor locators for graph's major/minor ticks.
+    Format dates/times of x axis.
+    Autoscale graph view.
+    Show grid on graph.
+    """
+    # HourLocator creates major ticks every 2 hours in a 24 hour period
+    hours = HourLocator(byhour=range(24), interval=2)
+    ax.xaxis.set_major_locator(hours)
+
+    # MinuteLocator creates minor ticks every 30 minutes in a 1 hour period
+    minutes = MinuteLocator(byminute=range(60), interval=30)
+    ax.xaxis.set_minor_locator(minutes)
+
+    # Creates format 'Hour:MinutePeriod Month/Day/Year' x-axis ticks
+    # Example: '5:30PM 9/23/15'
+    time_fmt = DateFormatter('%H:%M%p %x')
+    ax.xaxis.set_major_formatter(time_fmt)
+
+    # Formats x-axis information 'Weekday Month Day Hour:MinutePeriod'
+    # Example: 'Tuesday Sep 23 12:15PM'
+    ax.fmt_xdata = DateFormatter('%A %b %d %H:%M%p')
+
+    ax.autoscale_view()
+
+    ax.grid(True)
+
+
 def create_reader(csvfile=None):
     """
     Summary: Validates a csv file, returns a DictReader object.
@@ -29,13 +60,10 @@ def create_reader(csvfile=None):
     # Checks to see that the csv file imported has a header row,
     # that will be used for later parsing.
     print(
-        "\tFile has Header: {}".format(
-            Sniffer().has_header(csvfile.read(1024))
+        '\tFile has Header: {}\n\tFile Delimiter: "{}"'.format(
+            Sniffer().has_header(csvfile.read(1024)),
+            file_dialect.delimiter
         )
-    )
-    print(
-        '\tFile Delimiter: "{}"'.format(
-            file_dialect.delimiter)
     )
 
     # Resets the read/write pointer within the file
@@ -97,46 +125,43 @@ def create_dataset(reader=None, data_centers=None):
     return accepted_records
 
 
-def plot_dataset(name=None, records=[], ax=None):
+def plot_dataset(name=None, dataset=[], ax=None):
     """Function to plot data for a specified Data Center."""
     values = []
     times = []
-    for r in records[:]:
-        if r[0] == name:
-            times.append(dt.epoch2num(r[1]))
-            values.append(r[2])
-            records.remove(r)
+    for record in dataset[:]:
+        if record[0] == name:
+            times.append(dt.epoch2num(record[1]))
+            values.append(record[2])
+            dataset.remove(record)
         else:
             pass
     ax.plot_date(times, values, xdate=True)
 
 
-def graph_dataset(dc_dataset_to_graph=None):
+def graph_dataset(data_center_list=None, dataset_to_graph=None):
     """
     Summary: function that graphs data center dataset.
 
     Arguments: 'dc_dataset_to_graph' is a list containing dictionary
     instances holding specific datacenter attributes for value and time
     """
-    # List to keep track of plotted data centers for legend creation
+    # List of plotted data centers for dynamic legend creation
     plotted_dc = []
 
-    hours = HourLocator(byhour=range(24), interval=2)
-    minutes = MinuteLocator(byminute=range(60), interval=30)
-    time_fmt = DateFormatter('%H:%M%p %x')
+    # Creating figure and axes objects for display
     fig, ax = plt.subplots()
 
-    for dc in dataCenters:
-        plot_dataset(dc, dc_dataset_to_graph, ax)
+    # Formatting y and x axis for effective plotting
+    format_axes(ax)
+
+    # Iterating through list of data centers to be plotted together.
+    for dc in data_center_list:
+        # For each data center, 'dc', plot it's data from dataset.
+        plot_dataset(dc, dataset_to_graph, ax)
+
+        # Add data center to list of plotted dcs for dynamic legend
         plotted_dc.append(dc)
-
-    ax.xaxis.set_major_locator(hours)
-    ax.xaxis.set_major_formatter(time_fmt)
-    ax.xaxis.set_minor_locator(minutes)
-    ax.autoscale_view()
-
-    ax.fmt_xdata = DateFormatter('%A %b %d %H:%M%p')
-    ax.grid(True)
 
     fig.autofmt_xdate()
 
@@ -163,4 +188,4 @@ with open(test_file, 'r') as csvfile:
     accepted_records = create_dataset(reader, dataCenters)
 
     # Graphing Data Center Data
-    graph_dataset(accepted_records)
+    graph_dataset(dataCenters, accepted_records)
