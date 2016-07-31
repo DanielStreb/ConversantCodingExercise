@@ -45,6 +45,25 @@ def format_axes(ax=None):
     ax.grid(True)
 
 
+def valid_value(number):
+    """
+    Summary: Checks that value is a valid positive number.
+
+    Description: Accepts positive whole and decimal numbers.
+    """
+    try:
+        # Checking that entered value can be converted to a float.
+        # Excludes letters and symbols.
+        float(number)
+
+        # Checking that validated number is nonnegative.
+        if float(number) > 0:
+            return True
+        return False
+    except ValueError:
+        return False
+
+
 def create_reader(csvfile=None):
     """
     Summary: Validates a csv file, returns a DictReader object.
@@ -75,25 +94,6 @@ def create_reader(csvfile=None):
 
     # Return DictReader object
     return reader
-
-
-def valid_value(number):
-    """
-    Summary: Checks that value is a valid positive number.
-
-    Description: Accepts positive whole and decimal numbers.
-    """
-    try:
-        # Checking that entered value can be converted to a float.
-        # Excludes letters and symbols.
-        float(number)
-
-        # Checking that validated number is nonnegative.
-        if float(number) > 0:
-            return True
-        return False
-    except ValueError:
-        return False
 
 
 def create_dataset(reader=None, data_centers=None):
