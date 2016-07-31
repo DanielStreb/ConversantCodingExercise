@@ -9,9 +9,10 @@ from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
 class Grapher:
     """Class description."""
 
-    def __init__(self, dataset):
+    def __init__(self, dataset, dcs_names):
         """Method."""
         self.dataset = dataset
+        self.dcs_to_graph = dcs_names
 
     def format_axes(self, ax=None):
         """
@@ -56,7 +57,7 @@ class Grapher:
                 pass
         ax.plot_date(times, values, xdate=True)
 
-    def graph_dataset(self, data_center_list=None):
+    def graph_dataset(self):
         """
         Summary: function that graphs data center dataset.
 
@@ -73,7 +74,7 @@ class Grapher:
         self.format_axes(ax)
 
         # Iterating through list of data centers to be plotted together.
-        for dc in data_center_list:
+        for dc in self.dcs_to_graph:
             # For each data center, 'dc', plot it's data from dataset.
             self.plot_dataset(dc, ax)
 
