@@ -97,15 +97,15 @@ def create_dataset(reader=None, data_centers=None):
     return accepted_records
 
 
-def plot_dataset(name=None, records=[], ax=None):
+def plot_dataset(name=None, dataset=[], ax=None):
     """Function to plot data for a specified Data Center."""
     values = []
     times = []
-    for r in records[:]:
-        if r[0] == name:
-            times.append(dt.epoch2num(r[1]))
-            values.append(r[2])
-            records.remove(r)
+    for record in dataset[:]:
+        if record[0] == name:
+            times.append(dt.epoch2num(record[1]))
+            values.append(record[2])
+            dataset.remove(record)
         else:
             pass
     ax.plot_date(times, values, xdate=True)
