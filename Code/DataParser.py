@@ -5,10 +5,22 @@ from csv import Sniffer, DictReader
 
 
 class DataParser:
-    """Class description."""
+    """
+    Summary: parses a data file, and returns list of the filtered data.
+
+    Instances:
+    1. accepted_records
+    2. ignored_records
+
+    Methods:
+    1. valid_value
+    2. create_reader
+    3. create_dataset
+    4. get_dataset
+    """
 
     def __init__(self, csvfile, data_centers):
-        """Method Definition."""
+        """DataParser constructor."""
         self.accepted_records = []
         self.ignored_records = []
 
