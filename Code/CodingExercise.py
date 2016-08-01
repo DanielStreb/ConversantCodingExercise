@@ -19,7 +19,7 @@ def main():
 
     while True:
         dc_string = input("\t> ")
-        if re.search(my_regex, dc_string): 
+        if re.search(my_regex, dc_string):
             dcs.append(dc_string)
         elif dc_string == '':
             break
