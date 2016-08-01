@@ -1,4 +1,8 @@
-"""DatasetDisplay.py."""
+"""
+Program file: DatasetDisplay.py
+
+This program plots and displays a given dataset
+"""
 
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
