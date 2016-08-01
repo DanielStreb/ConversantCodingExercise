@@ -1,5 +1,5 @@
 """
-Program file: DatasetDisplay.py
+Program file: DatasetDisplay.py.
 
 This program plots and displays a given dataset
 """
@@ -10,7 +10,18 @@ from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
 
 
 class DatasetDisplay:
-    """Class description."""
+    """
+    Summary: plots and displays given dataset.
+
+    Instances:
+    1. dataset
+    2. dcs_to_graph
+
+    Methods:
+    1. format_axes
+    2. plot_dataset
+    3. show_plot
+    """
 
     def __init__(self, dataset, dcs_names):
         """Method."""
