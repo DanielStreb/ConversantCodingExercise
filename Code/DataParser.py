@@ -1,5 +1,5 @@
 """
-Program file: DataParser.
+Program file: DataParser.py.
 
 This program parses and returns a dataset for a plotting program
 """
