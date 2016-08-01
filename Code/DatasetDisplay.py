@@ -1,11 +1,11 @@
-"""Grapher.py."""
+"""DatasetDisplay.py."""
 
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
 from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
 
 
-class Grapher:
+class DatasetDisplay:
     """Class description."""
 
     def __init__(self, dataset, dcs_names):
@@ -56,7 +56,7 @@ class Grapher:
                 pass
         ax.plot_date(times, values, xdate=True)
 
-    def display_plot(self):
+    def show_plot(self):
         """
         Summary: function that graphs data center dataset.
 
