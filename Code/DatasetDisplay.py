@@ -1,15 +1,30 @@
-"""Grapher.py."""
+"""
+Program file: DatasetDisplay.py.
+
+This program plots and displays a given dataset
+"""
 
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
 from matplotlib.dates import HourLocator, MinuteLocator, DateFormatter
 
 
-class Grapher:
-    """Class description."""
+class DatasetDisplay:
+    """
+    Summary: plots and displays given dataset.
+
+    Instances:
+    1. dataset
+    2. dcs_to_graph
+
+    Methods:
+    1. format_axes
+    2. plot_dataset
+    3. show_plot
+    """
 
     def __init__(self, dataset, dcs_names):
-        """Method."""
+        """DatasetDisplay constructor."""
         self.dataset = dataset
         self.dcs_to_graph = dcs_names
 
@@ -17,10 +32,11 @@ class Grapher:
         """
         Summary: helper function for customizing graph display.
 
-        Create and set major/minor locators for graph's major/minor ticks.
-        Format dates/times of x axis.
-        Autoscale graph view.
-        Show grid on graph.
+        Decription:
+        * Create and set major/minor locators for graph's major/minor ticks.
+        * Format dates/times of x axis.
+        * Autoscale graph view.
+        * Show grid on graph.
         """
         # HourLocator creates major ticks every 2 hours in a 24 hour period
         hours = HourLocator(byhour=range(24), interval=2)
@@ -56,12 +72,15 @@ class Grapher:
                 pass
         ax.plot_date(times, values, xdate=True)
 
-    def graph_dataset(self):
+    def show_plot(self):
         """
         Summary: function that graphs data center dataset.
 
-        Arguments: 'dc_self.dataset' is a list containing dictionary
-        instances holding specific datacenter attributes for value and time
+        Description:
+        * Formats plot axes for proper display
+        * Plots specified data centers on display
+        * Labels display title, x-axis, y-axis
+        * Creates a legend according to specified data centers
         """
         # List of plotted data centers for dynamic legend creation
         plotted_dc = []

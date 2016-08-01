@@ -1,13 +1,30 @@
-"""DataParser."""
+"""
+Program file: DataParser.py.
 
+This program parses and returns a dataset for a plotting program
+"""
+
+from sys import exit
 from csv import Sniffer, DictReader
 
 
 class DataParser:
-    """Class description."""
+    """
+    Summary: parses a data file, and returns list of the filtered data.
+
+    Instances:
+    1. accepted_records
+    2. ignored_records
+
+    Methods:
+    1. valid_value
+    2. create_reader
+    3. create_dataset
+    4. get_dataset
+    """
 
     def __init__(self, csvfile, data_centers):
-        """Method Definition."""
+        """DataParser constructor."""
         self.accepted_records = []
         self.ignored_records = []
 
@@ -53,12 +70,9 @@ class DataParser:
 
         # Checks to see that the csv file imported has a header row,
         # that will be used for later parsing.
-        print(
-            '\tFile has Header: {}\n\tFile Delimiter: "{}"'.format(
-                Sniffer().has_header(csvfile.read(1024)),
-                file_dialect.delimiter
-            )
-        )
+        if not Sniffer().has_header(csvfile.read(1024)):
+            print('Imported csv file lacks header row')
+            exit()
 
         # Resets the read/write pointer within the file
         csvfile.seek(0)
