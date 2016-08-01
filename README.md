@@ -2,15 +2,6 @@
 ### _Data parsing, analysis, and display exercise._
 
 ###Getting Started:
-<<<<<<< HEAD
-    With VirtualEnvWrapper
-        - Activate virtual environment "Env" provided in directory "VirtualEnvironment".
-            >workon Env
-    With VirtualEnv
-        -
-![Graph](/Docs/Data Plots/Graph(A).png)
-Format: ![Alt Text](url)
-=======
     Packages Required:
     * cycler==0.10.0
     * matplotlib==1.5.1
@@ -36,10 +27,21 @@ Format: ![Alt Text](url)
 #####Graphing data for Data Centers **I**, **A**, and **S**
             >python ConversantCodingExercise
             Enter data centers to be graphed
-                > I
-                > A
-                > S
-                >
+            >> I
+            >> A
+            >> S
+            >>
+            Data Center:A
+            Max Value:5861.477778, 2015-09-29 12:25:00+00:00
+            Average Value:3592.9809935847593
+            
+            Data Center:I
+            Max Value:61526.57778, 2015-09-28 18:12:00+00:00
+            Average Value:31343.795766006493
+            
+            Data Center:S
+            Max Value:20725.35148, 2015-09-28 16:12:00+00:00
+            Average Value:8457.001338256716
 #####Graph Produced
 ![Graph](/Docs/Data Plots/Graph(I, S, A).png)
->>>>>>> e5c1e57c0965c7298a37c7b8d390293a4d0ffce7
+
