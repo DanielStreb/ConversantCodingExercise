@@ -1,4 +1,8 @@
-"""DataParser."""
+"""
+Program file: DataParser.
+
+This program parses and returns a dataset for a plotting program
+"""
 
 from sys import exit
 from csv import Sniffer, DictReader
