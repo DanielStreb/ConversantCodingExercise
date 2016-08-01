@@ -1,4 +1,8 @@
-"""CodingExercise.py."""
+"""
+Program File: CodingExercise.py.
+
+This program parses, plots, and displays the Data(Relevant).csv file
+"""
 import re
 from DataParser import DataParser
 from DatasetDisplay import DatasetDisplay

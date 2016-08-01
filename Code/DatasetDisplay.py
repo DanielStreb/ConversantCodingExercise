@@ -24,7 +24,7 @@ class DatasetDisplay:
     """
 
     def __init__(self, dataset, dcs_names):
-        """Method."""
+        """DatasetDisplay constructor."""
         self.dataset = dataset
         self.dcs_to_graph = dcs_names
 
@@ -32,10 +32,11 @@ class DatasetDisplay:
         """
         Summary: helper function for customizing graph display.
 
-        Create and set major/minor locators for graph's major/minor ticks.
-        Format dates/times of x axis.
-        Autoscale graph view.
-        Show grid on graph.
+        Decription:
+        * Create and set major/minor locators for graph's major/minor ticks.
+        * Format dates/times of x axis.
+        * Autoscale graph view.
+        * Show grid on graph.
         """
         # HourLocator creates major ticks every 2 hours in a 24 hour period
         hours = HourLocator(byhour=range(24), interval=2)
@@ -75,8 +76,11 @@ class DatasetDisplay:
         """
         Summary: function that graphs data center dataset.
 
-        Arguments: 'dc_self.dataset' is a list containing dictionary
-        instances holding specific datacenter attributes for value and time
+        Description:
+        * Formats plot axes for proper display
+        * Plots specified data centers on display
+        * Labels display title, x-axis, y-axis
+        * Creates a legend according to specified data centers
         """
         # List of plotted data centers for dynamic legend creation
         plotted_dc = []
