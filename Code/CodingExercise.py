@@ -23,7 +23,7 @@ def main():
     print('Enter data centers to be graphed')
 
     while True:  # Loop until user enters valid Data center name
-        user_input = input("\t> ")
+        user_input = input(">> ")
         # Checking if user_input matches defined regular expression
         if re.search(my_regex, user_input):
             dc_name_list.append(user_input)

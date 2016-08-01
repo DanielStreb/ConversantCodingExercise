@@ -63,13 +63,27 @@ class DatasetDisplay:
         """Function to plot data for a specified Data Center."""
         values = []
         times = []
+        max_value = 0
+        max_value_time = 0
         for record in self.dataset[:]:
             if record[0] == name:
                 times.append(dt.epoch2num(record[1]))
                 values.append(record[2])
+
+                if record[2] > max_value:
+                    max_value = record[2]
+                    max_value_time = dt.epoch2num(record[1])
                 self.dataset.remove(record)
             else:
                 pass
+
+        value_mean = sum(values) / float(len(values))
+        print(
+            "Data Center:{}\nMax Value:{}, {}\nAverage Value:{}\n".format(
+                name, max_value, dt.num2date(max_value_time), value_mean
+            )
+        )
+
         ax.plot_date(times, values, xdate=True)
 
     def show_plot(self):
